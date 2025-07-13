@@ -111,11 +111,14 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 16px;
+            /* --- 修改点: 优化自适应的关键 --- */
+            min-width: 0; 
         }
 
         #apply-dict-btn {
             padding: 0 15px;
             font-size: 14px;
+            flex-shrink: 0; /* 防止按钮被压缩 */
         }
 
         #dict-error {
@@ -195,7 +198,8 @@
             <label for="custom-dict">自定义加密字典：</label>
             <div class="dict-input-wrapper">
                 <input type="text" id="custom-dict">
-                <button id="apply-dict-btn">应用新字典</button>
+                <!-- --- 修改点: 按钮文字变短 --- -->
+                <button id="apply-dict-btn">应用</button>
             </div>
             <p id="dict-error"></p>
         </div>
@@ -277,28 +281,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 字典管理 ---
     function applyDictionary(newDictString) {
         dictError.textContent = ''; // 清除旧错误
-        // 验证1: 不能为空或太短
         if (!newDictString || newDictString.length < 2) {
             dictError.textContent = '错误：字典至少需要2个字符。';
             return false;
         }
-        // 验证2: 不能包含空格
         if (newDictString.includes(SEPARATOR)) {
             dictError.textContent = `错误：字典不能包含空格符。`;
             return false;
         }
-        // 验证3: 不能有重复字符
         if (new Set(newDictString).size !== newDictString.length) {
             dictError.textContent = '错误：字典中不能有重复字符。';
             return false;
         }
         
-        // 应用新字典
         GUGU_CHARS = Array.from(newDictString);
         localStorage.setItem('customDictionary', newDictString);
 
         const originalText = applyDictBtn.innerText;
-        applyDictBtn.innerText = '已应用!';
+        // --- 修改点: 成功提示变短 ---
+        applyDictBtn.innerText = '成功!';
         setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
 
         return true;
