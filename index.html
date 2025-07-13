@@ -3,250 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>哈基米文字加密器</title>
+    <title>灵感菇加密器</title>
     <style>
+        /* CSS 变量定义主题颜色 */
         :root {
-            --bg-color: #1a1a1a;
-            --text-color: #e0e0e0;
-            --primary-color: #ff9a00;
-            --container-bg: #2c2c2c;
-            --border-color: #444;
-            --button-bg: #333;
-            --button-hover-bg: #444;
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dcdfe6;
+            --button-bg: #409eff;
+            --button-text: #ffffff;
+            --button-hover-bg: #66b1ff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --theme-icon: '☀️';
         }
+
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --container-bg: #2c2c2c;
+            --text-color: #e0e0e0;
+            --border-color: #444444;
+            --button-bg: #585ce5;
+            --button-hover-bg: #797ee8;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --theme-icon: '🌙';
+        }
+
+        /* 全局样式和布局 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
             padding: 20px;
-            box-sizing: border-box;
         }
+
+        /* 主容器 */
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             background-color: var(--container-bg);
-            padding: 30px;
+            padding: 25px 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: background-color 0.3s;
         }
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 25px;
-            font-size: 2em;
-        }
-        .textarea-group {
+        
+        /* 标题和主题切换 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
         }
+
+        h1 {
+            font-size: 24px;
+            color: var(--text-color);
+        }
+
+        #theme-toggle {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        #theme-toggle::after {
+            content: var(--theme-icon);
+        }
+
+        /* 文本区域 */
         textarea {
             width: 100%;
             height: 150px;
-            background-color: var(--bg-color);
+            padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 15px;
+            background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 16px;
             resize: vertical;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
+
         textarea:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(255, 154, 0, 0.3);
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-bg) 30%, transparent);
         }
-        .button-group {
+
+        /* 按钮区域 */
+        .buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
+            margin-bottom: 20px;
         }
+
         button {
-            padding: 12px 20px;
+            padding: 12px;
             font-size: 16px;
             font-weight: bold;
-            color: var(--text-color);
-            background-color: var(--button-bg);
-            border: 1px solid var(--border-color);
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            transition: background-color 0.2s, transform 0.1s;
         }
+
         button:hover {
             background-color: var(--button-hover-bg);
         }
+
         button:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
-        button.primary {
-            background-color: var(--primary-color);
-            color: #111;
-            border-color: var(--primary-color);
+
+        #copy-btn {
+            grid-column: 1 / -1; /* 让复制按钮横跨整个区域 */
+            background-color: #67c23a;
         }
-        button.primary:hover {
-            background-color: #ffaf3a;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 14px;
-            color: #888;
+        #copy-btn:hover {
+             background-color: #85d861;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>哈基米文字混淆器</h1>
-
-        <div class="textarea-group">
-            <textarea id="inputText" placeholder="在这里输入要加密或解密的原文..."></textarea>
-        </div>
-
-        <div class="button-group">
-            <button id="encryptBtn" class="primary">加密成哈基米</button>
-            <button id="decryptBtn">从哈基米解密</button>
-            <button id="copyBtn">复制结果</button>
-            <button id="clearBtn">清空全部</button>
-        </div>
-
-        <div class="textarea-group" style="margin-top: 20px;">
-            <textarea id="outputText" placeholder="结果会出现在这里..." readonly></textarea>
+        <div class="header">
+            <h1>灵感菇加密器</h1>
+            <button id="theme-toggle" title="切换深色/浅色模式"></button>
         </div>
         
-        <div class="footer">
-            哈基咪是蜂蜜
+        <textarea id="input-text" placeholder="在此输入要加密或解密的文本..."></textarea>
+        
+        <div class="buttons">
+            <button id="encrypt-btn">加密成灵感菇</button>
+            <button id="decrypt-btn">从灵感菇解密</button>
         </div>
+        
+        <textarea id="output-text" placeholder="结果将显示在此处..." readonly></textarea>
+
+        <button id="copy-btn">复制结果</button>
     </div>
 
-    <script>
-        // 定义哈基米“词典”，作为12进制的“数字”
-        const HACHIMI_ALPHABET = [
-            "哈基咪", // 0
-            "阿西噶",     // 1
-            "哈雅酷那路", // 2
-            "哈基",     // 3
-            "那美路多", // 4
-            "库纳鲁", // 5
-            "曼波",     // 6
-            "哦吗吉利",   // 7
-            "吗吉利哇", // 8
-            "亚不亚不", // 9
-            "啊曼波啊", // 10
-            "哦玛吉利曼波" // 11
-        ];
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-        // 创建一个反向查找表，用于解密
-        const HACHIMI_MAP = new Map(HACHIMI_ALPHABET.map((word, index) => [word, index]));
-        const BASE = HACHIMI_ALPHABET.length;
-        
-        // 用于分隔不同文字加密后结果的分隔符
-        const CHAR_SEPARATOR = "，";
-        // 用于分隔加密后单个文字内部不同词语的分隔符
-        const PHRASE_SEPARATOR = " ";
+    // --- 核心常量 ---
+    const GUGU_CHARS = ['灵', '感', '菇', '咕', '嘎', '噜', '刮', '擦', '呖', '哩'];
+    const SEPARATOR = ' '; // 使用空格作为每个加密字符之间的分隔符
 
-        // --- DOM 元素获取 ---
-        const inputText = document.getElementById('inputText');
-        const outputText = document.getElementById('outputText');
-        const encryptBtn = document.getElementById('encryptBtn');
-        const decryptBtn = document.getElementById('decryptBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const clearBtn = document.getElementById('clearBtn');
+    // --- DOM 元素获取 ---
+    const inputText = document.getElementById('input-text');
+    const outputText = document.getElementById('output-text');
+    const encryptBtn = document.getElementById('encrypt-btn');
+    const decryptBtn = document.getElementById('decrypt-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const themeToggle = document.getElementById('theme-toggle');
 
-        /**
-         * 将一个十进制数字转换为哈基米字符串
-         * @param {number} num - Unicode码点
-         * @returns {string} - 哈基米字符串
-         */
-        function toHachimiBase(num) {
-            if (num === 0) return HACHIMI_ALPHABET[0];
-            const result = [];
-            while (num > 0) {
-                const remainder = num % BASE;
-                result.unshift(HACHIMI_ALPHABET[remainder]);
-                num = Math.floor(num / BASE);
-            }
-            return result.join(PHRASE_SEPARATOR);
+    // --- 加密逻辑 ---
+    // 将普通数字转换为灵感菇进制数
+    function toGuguBase(n) {
+        if (n === 0) return GUGU_CHARS[0];
+        let result = '';
+        while (n > 0) {
+            const remainder = n % GUGU_CHARS.length;
+            result = GUGU_CHARS[remainder] + result;
+            n = Math.floor(n / GUGU_CHARS.length);
         }
+        return result;
+    }
 
-        /**
-         * 将哈基米字符串转换回十进制数字
-         * @param {string} hachimiStr - 哈基米字符串
-         * @returns {number} - Unicode码点
-         */
-        function fromHachimiBase(hachimiStr) {
-            const phrases = hachimiStr.split(PHRASE_SEPARATOR);
-            let num = 0;
-            for (let i = 0; i < phrases.length; i++) {
-                const phrase = phrases[i];
-                if (!HACHIMI_MAP.has(phrase)) {
-                    throw new Error(`无效的哈基米词语: "${phrase}"`);
-                }
-                const digit = HACHIMI_MAP.get(phrase);
-                num += digit * Math.pow(BASE, phrases.length - 1 - i);
-            }
-            return num;
+    // 主加密函数
+    function encrypt(text) {
+        const encryptedChars = [];
+        for (let i = 0; i < text.length; i++) {
+            const charCode = text.charCodeAt(i);
+            encryptedChars.push(toGuguBase(charCode));
         }
+        return encryptedChars.join(SEPARATOR);
+    }
 
-        // --- 事件监听 ---
-
-        encryptBtn.addEventListener('click', () => {
-            const text = inputText.value;
-            if (!text) return;
-
-            try {
-                const encryptedChars = Array.from(text)
-                    .map(char => {
-                        const codePoint = char.codePointAt(0);
-                        return toHachimiBase(codePoint);
-                    });
-                outputText.value = encryptedChars.join(CHAR_SEPARATOR);
-            } catch (e) {
-                outputText.value = "加密失败: " + e.message;
+    // --- 解密逻辑 ---
+    // 将灵感菇进制数转换回普通数字
+    function fromGuguBase(guguStr) {
+        let decimalValue = 0;
+        for (let i = 0; i < guguStr.length; i++) {
+            const char = guguStr[i];
+            const index = GUGU_CHARS.indexOf(char);
+            if (index === -1) {
+                throw new Error(`无效的灵感菇字符: "${char}"`);
             }
-        });
+            decimalValue = decimalValue * GUGU_CHARS.length + index;
+        }
+        return decimalValue;
+    }
 
-        decryptBtn.addEventListener('click', () => {
-            const text = inputText.value;
-            if (!text) return;
-
+    // 主解密函数
+    function decrypt(guguText) {
+        const parts = guguText.trim().split(SEPARATOR);
+        let decryptedText = '';
+        for (const part of parts) {
+            if (part === '') continue;
             try {
-                const decryptedChars = text.split(CHAR_SEPARATOR)
-                    .map(hachimiStr => {
-                        if (hachimiStr.trim() === '') return '';
-                        const codePoint = fromHachimiBase(hachimiStr);
-                        return String.fromCodePoint(codePoint);
-                    });
-                outputText.value = decryptedChars.join('');
-            } catch (e) {
-                outputText.value = "解密失败，请检查输入格式是否正确。\n错误详情: " + e.message;
+                const charCode = fromGuguBase(part);
+                decryptedText += String.fromCharCode(charCode);
+            } catch (error) {
+                return `解密失败：${error.message}`;
             }
-        });
+        }
+        return decryptedText;
+    }
 
-        copyBtn.addEventListener('click', () => {
-            if (!outputText.value) return;
-            navigator.clipboard.writeText(outputText.value).then(() => {
-                const originalText = copyBtn.innerText;
-                copyBtn.innerText = '已复制!';
-                setTimeout(() => {
-                    copyBtn.innerText = originalText;
-                }, 1500);
-            }).catch(err => {
-                alert('复制失败: ' + err);
-            });
-        });
 
-        clearBtn.addEventListener('click', () => {
-            inputText.value = '';
-            outputText.value = '';
-        });
+    // --- 事件监听器 ---
+    encryptBtn.addEventListener('click', () => {
+        const text = inputText.value;
+        if (text) {
+            outputText.value = encrypt(text);
+        }
+    });
 
-    </script>
+    decryptBtn.addEventListener('click', () => {
+        const text = inputText.value;
+        if (text) {
+            outputText.value = decrypt(text);
+        }
+    });
+
+    copyBtn.addEventListener('click', () => {
+        if (outputText.value) {
+            navigator.clipboard.writeText(outputText.value)
+                .then(() => {
+                    const originalText = copyBtn.innerText;
+                    copyBtn.innerText = '已复制！';
+                    setTimeout(() => {
+                        copyBtn.innerText = originalText;
+                    }, 1500);
+                })
+                .catch(err => {
+                    console.error('复制失败: ', err);
+                });
+        }
+    });
+
+    // --- 主题切换逻辑 ---
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+        localStorage.setItem('theme', currentTheme);
+    });
+
+    // --- 初始化主题 ---
+    // 页面加载时，检查本地存储以应用之前的主题
+    const savedTheme = localStorage.getItem('theme');
+    // 默认设置为深色，除非用户明确选择了浅色
+    if (savedTheme !== 'light') {
+        document.body.classList.add('dark-mode');
+    }
+});
+</script>
+
 </body>
 </html>
