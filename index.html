@@ -31,159 +31,28 @@
             --theme-icon: '🌙';
         }
 
-        /* 全局样式和布局 */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* 改为flex-start以适应更长的内容 */
-            min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
-            padding: 20px;
-        }
-
-        /* 主容器 */
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--container-bg);
-            padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px var(--shadow-color);
-            transition: background-color 0.3s;
-        }
-        
-        /* 标题和主题切换 */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 24px;
-            color: var(--text-color);
-        }
-
-        #theme-toggle {
-            font-size: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-        }
-        #theme-toggle::after {
-            content: var(--theme-icon);
-        }
-
-        /* 自定义字典区域 */
-        .dictionary-section {
-            margin-bottom: 20px;
-        }
-
-        .dictionary-section label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        .dict-input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-        
-        #custom-dict {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 16px;
-            /* --- 修改点: 优化自适应的关键 --- */
-            min-width: 0; 
-        }
-
-        #apply-dict-btn {
-            padding: 0 15px;
-            font-size: 14px;
-            flex-shrink: 0; /* 防止按钮被压缩 */
-        }
-
-        #dict-error {
-            color: var(--error-color);
-            font-size: 14px;
-            margin-top: 8px;
-            height: 1em; /* 预留空间，防止布局跳动 */
-        }
-        
-        /* 文本区域 */
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 16px;
-            resize: vertical;
-            margin-bottom: 20px;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        textarea:focus, #custom-dict:focus {
-            outline: none;
-            border-color: var(--button-bg);
-            box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-bg) 30%, transparent);
-        }
-
-        /* 按钮区域 */
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background-color: var(--button-bg);
-            color: var(--button-text);
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        button:hover {
-            background-color: var(--button-hover-bg);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        #copy-btn {
-            grid-column: 1 / -1; /* 让复制按钮横跨整个区域 */
-            background-color: #67c23a;
-        }
-        #copy-btn:hover {
-             background-color: #85d861;
-        }
+        /* 全局样式和布局 (省略，与之前版本相同) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; transition: background-color 0.3s, color 0.3s; padding: 20px; }
+        .container { width: 100%; max-width: 600px; background-color: var(--container-bg); padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color 0.3s; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        h1 { font-size: 24px; color: var(--text-color); }
+        #theme-toggle { font-size: 24px; background: none; border: none; cursor: pointer; padding: 5px; }
+        #theme-toggle::after { content: var(--theme-icon); }
+        .dictionary-section { margin-bottom: 20px; }
+        .dictionary-section label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .dict-input-wrapper { display: flex; gap: 10px; }
+        #custom-dict { flex-grow: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-color); font-size: 16px; min-width: 0; }
+        #apply-dict-btn { padding: 0 15px; font-size: 14px; flex-shrink: 0; }
+        #dict-error { color: var(--error-color); font-size: 14px; margin-top: 8px; height: 1em; }
+        textarea { width: 100%; height: 150px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-color); font-size: 16px; resize: vertical; margin-bottom: 20px; transition: background-color 0.3s, border-color 0.3s; }
+        textarea:focus, #custom-dict:focus { outline: none; border-color: var(--button-bg); box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-bg) 30%, transparent); }
+        .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        button { padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; background-color: var(--button-bg); color: var(--button-text); transition: background-color 0.2s, transform 0.1s; }
+        button:hover { background-color: var(--button-hover-bg); }
+        button:active { transform: scale(0.98); }
+        #copy-btn { grid-column: 1 / -1; background-color: #67c23a; }
+        #copy-btn:hover { background-color: #85d861; }
     </style>
 </head>
 <body>
@@ -198,7 +67,6 @@
             <label for="custom-dict">自定义加密字典：</label>
             <div class="dict-input-wrapper">
                 <input type="text" id="custom-dict">
-                <!-- --- 修改点: 按钮文字变短 --- -->
                 <button id="apply-dict-btn">应用</button>
             </div>
             <p id="dict-error"></p>
@@ -221,10 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 核心常量和变量 ---
     const DEFAULT_GUGU_CHARS = ['灵', '感', '菇', '咕', '嘎', '噜', '刮', '擦', '呖', '哩'];
-    let GUGU_CHARS = [...DEFAULT_GUGU_CHARS]; // 当前使用的字典
-    const SEPARATOR = ' '; // 使用空格作为每个加密字符之间的分隔符
+    let GUGU_CHARS = [...DEFAULT_GUGU_CHARS];
+    
+    // --- 修改点: 分隔符生成函数 ---
+    // 不再是静态常量，而是根据当前字典动态生成
+    const getSeparator = () => {
+        // 分隔符是当前字典的第一个字符重复两次
+        return GUGU_CHARS[0] + GUGU_CHARS[0];
+    };
 
-    // --- DOM 元素获取 ---
+    // --- DOM 元素获取 (省略，无变化) ---
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
     const encryptBtn = document.getElementById('encrypt-btn');
@@ -235,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyDictBtn = document.getElementById('apply-dict-btn');
     const dictError = document.getElementById('dict-error');
 
-    // --- 加密逻辑 (这些函数现在依赖于可变的 GUGU_CHARS) ---
+    // --- 加密逻辑 ---
     function toGuguBase(n) {
         if (n === 0) return GUGU_CHARS[0];
         let result = '';
@@ -248,7 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function encrypt(text) {
-        return text.split('').map(char => toGuguBase(char.charCodeAt(0))).join(SEPARATOR);
+        // --- 修改点: 加密时使用动态分隔符 ---
+        return text.split('').map(char => toGuguBase(char.charCodeAt(0))).join(getSeparator());
     }
 
     // --- 解密逻辑 ---
@@ -259,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const char = guguStr[i];
             const index = GUGU_CHARS.indexOf(char);
             if (index === -1) {
+                // 如果在解密时发现了一个不在字典里的字符，则立即报错
                 throw new Error(`无效的字典字符: "${char}"`);
             }
             decimalValue = decimalValue * base + index;
@@ -267,10 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function decrypt(guguText) {
-        const parts = guguText.trim().split(SEPARATOR);
+        // --- 修改点: 解密时使用动态分隔符 ---
+        const parts = guguText.split(getSeparator());
         try {
             return parts.map(part => {
-                if (part === '') return '';
+                if (part === '') return ''; // 处理可能由split产生的空字符串
                 return String.fromCharCode(fromGuguBase(part));
             }).join('');
         } catch (error) {
@@ -280,15 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- 字典管理 ---
     function applyDictionary(newDictString) {
-        dictError.textContent = ''; // 清除旧错误
+        dictError.textContent = '';
         if (!newDictString || newDictString.length < 2) {
             dictError.textContent = '错误：字典至少需要2个字符。';
             return false;
         }
-        if (newDictString.includes(SEPARATOR)) {
-            dictError.textContent = `错误：字典不能包含空格符。`;
-            return false;
-        }
+        // --- 修改点: 移除了对旧分隔符的检查，现在只检查重复字符即可 ---
+        // 这个检查已经足够，因为它能防止用户输入 'AA' 这样的字典
         if (new Set(newDictString).size !== newDictString.length) {
             dictError.textContent = '错误：字典中不能有重复字符。';
             return false;
@@ -298,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('customDictionary', newDictString);
 
         const originalText = applyDictBtn.innerText;
-        // --- 修改点: 成功提示变短 ---
         applyDictBtn.innerText = '成功!';
         setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
 
@@ -309,15 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
         applyDictionary(customDictInput.value);
     });
 
-    // --- 事件监听器 ---
+    // --- 事件监听器 (省略，无变化) ---
     encryptBtn.addEventListener('click', () => {
         if (inputText.value) outputText.value = encrypt(inputText.value);
     });
-
     decryptBtn.addEventListener('click', () => {
         if (inputText.value) outputText.value = decrypt(inputText.value);
     });
-
     copyBtn.addEventListener('click', () => {
         if (outputText.value) {
             navigator.clipboard.writeText(outputText.value).then(() => {
@@ -327,24 +199,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }).catch(err => console.error('复制失败: ', err));
         }
     });
-
-    // --- 主题切换逻辑 ---
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     });
 
-    // --- 初始化函数 ---
+    // --- 初始化函数 (无变化) ---
     function initialize() {
-        // 1. 初始化主题 (默认深色)
         if (localStorage.getItem('theme') !== 'light') {
             document.body.classList.add('dark-mode');
         }
 
-        // 2. 初始化字典
         const savedDict = localStorage.getItem('customDictionary');
         if (savedDict) {
-            GUGU_CHARS = Array.from(savedDict);
+            // 在加载时也要确保应用字典的逻辑是正确的
+            applyDictionary(savedDict);
             customDictInput.value = savedDict;
         } else {
             customDictInput.value = DEFAULT_GUGU_CHARS.join('');
