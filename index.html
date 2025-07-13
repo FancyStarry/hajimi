@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>灵感菇加密器</title>
-    <!-- 新增的图标链接 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg t='1752421917609' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='1588' width='200' height='200'%3e%3cpath d='M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m0-938.666667C277.333333 85.333333 85.333333 277.333333 85.333333 512s192 426.666667 426.666667 426.666667 426.666667-192 426.666667-426.666667S746.666667 85.333333 512 85.333333z' fill='%23585ce5' p-id='1589'%3e%3c/path%3e%3cpath d='M631.466667 635.733333H768v76.8h-136.533333v76.8h-89.6v-76.8H418.133333v-46.933333c-93.866667 89.6-110.933333 106.666667-119.466666 123.733333v-4.266666c-8.533333-17.066667-29.866667-46.933333-42.666667-55.466667 12.8-12.8 29.866667-38.4 29.866667-72.533333v-166.4H226.133333V409.6h145.066667v200.533333l21.333333-21.333333c8.533333 17.066667 17.066667 42.666667 25.6 59.733333v-12.8h123.733334v-25.6h-102.4v-76.8h102.4v-42.666666h89.6v42.666666h102.4v76.8h-102.4v25.6zM307.2 388.266667c-12.8-29.866667-42.666667-76.8-64-115.2l68.266667-42.666667c21.333333 34.133333 55.466667 81.066667 68.266666 110.933333L307.2 388.266667z m473.6-115.2c-25.6 51.2-64 93.866667-106.666667 132.266666 38.4 12.8 76.8 25.6 123.733334 34.133334-17.066667 17.066667-42.666667 51.2-55.466667 76.8-55.466667-12.8-102.4-34.133333-145.066667-59.733334-51.2 25.6-106.666667 46.933333-162.133333 64-8.533333-21.333333-29.866667-59.733333-46.933333-76.8 46.933333-8.533333 93.866667-25.6 136.533333-42.666666-25.6-25.6-46.933333-51.2-68.266667-81.066667h-38.4V247.466667h290.133334l17.066666-4.266667 55.466667 29.866667z m-234.666667 51.2c12.8 12.8 29.866667 29.866667 46.933334 42.666666 17.066667-12.8 38.4-25.6 51.2-42.666666h-98.133334z' fill='%23585ce5' p-id='1590'%3e%3c/path%3e%3c/svg%3e">
     <style>
         /* CSS (折叠) */
@@ -47,13 +46,10 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 核心常量和变量 ---
     const DEFAULT_GUGU_DICT_STRING = '灵感菇咕嘎噜刮擦呖哩';
-    
     let ENCODING_CHARS = [];
     let SEPARATOR = '';
 
-    // --- DOM 元素获取 (无变化) ---
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
     const encryptBtn = document.getElementById('encrypt-btn');
@@ -64,41 +60,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyDictBtn = document.getElementById('apply-dict-btn');
     const dictError = document.getElementById('dict-error');
     
-    // --- 核心算法：计算分隔符并返回编码用字典 ---
     function calculateSeparatorAndChars(fullDict) {
         const checksum = fullDict.reduce((sum, char) => sum + char.charCodeAt(0), 0);
         const separatorIndex = checksum % fullDict.length;
         const separatorChar = fullDict[separatorIndex];
         const encodingChars = fullDict.filter((_, index) => index !== separatorIndex);
-        
-        return {
-            separator: separatorChar,
-            chars: encodingChars
-        };
+        return { separator: separatorChar, chars: encodingChars };
     }
     
-    // --- 应用字典的函数 ---
+    // --- MODIFICATION START ---
+    // The applyDictionary function is now more forgiving.
     function applyDictionary(dictString) {
         dictError.textContent = '';
-        if (!dictString || dictString.length < 2) {
-            dictError.textContent = '错误：字典至少需要2个字符。';
-            return false;
-        }
-        if (new Set(dictString).size !== dictString.length) {
-            dictError.textContent = '错误：字典中不能有重复字符。';
+
+        // 1. Automatically remove duplicate characters using a Set.
+        const uniqueCharsArray = Array.from(new Set(dictString.split(''))).join('');
+        
+        // 2. Perform validation on the *cleaned* dictionary string.
+        if (uniqueCharsArray.length < 2) {
+            dictError.textContent = '错误：去重后，字典至少需要2个字符。';
             return false;
         }
         
-        const { separator, chars } = calculateSeparatorAndChars(Array.from(dictString));
+        // 3. Update the input field to show the user the cleaned dictionary.
+        customDictInput.value = uniqueCharsArray;
+        
+        // 4. Proceed with the cleaned dictionary.
+        const fullDict = Array.from(uniqueCharsArray);
+        const { separator, chars } = calculateSeparatorAndChars(fullDict);
         
         SEPARATOR = separator;
         ENCODING_CHARS = chars;
         
-        localStorage.setItem('customDictionary', dictString);
+        // 5. Save the cleaned dictionary to local storage.
+        localStorage.setItem('customDictionary', uniqueCharsArray);
         return true;
     }
+    // --- MODIFICATION END ---
 
-    // --- 加/解密逻辑 ---
     function toBase(n) {
         if (n === 0) return ENCODING_CHARS[0];
         let result = '';
@@ -125,10 +124,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function encrypt(text) {
+        // We must ensure that ENCODING_CHARS has been initialized.
+        if (ENCODING_CHARS.length === 0) {
+            alert('错误：加密字典未初始化，请先应用一个有效字典。');
+            return '';
+        }
         return text.split('').map(char => toBase(char.charCodeAt(0))).join(SEPARATOR);
     }
 
     function decrypt(guguText) {
+        // We must ensure that ENCODING_CHARS has been initialized.
+        if (ENCODING_CHARS.length === 0) {
+            alert('错误：解密字典未初始化，请先应用一个有效字典。');
+            return '';
+        }
         const parts = guguText.split(SEPARATOR);
         try {
             return parts.map(part => {
@@ -140,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // --- 事件监听器 ---
     applyDictBtn.addEventListener('click', () => {
         if (applyDictionary(customDictInput.value)) {
             const originalText = applyDictBtn.innerText;
@@ -161,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const originalText = copyBtn.innerText;
                 copyBtn.innerText = '已复制！';
                 setTimeout(() => { copyBtn.innerText = originalText; }, 1500);
-            }).catch(err => console.error('复制失败: ', err));
+            });
         }
     });
     themeToggle.addEventListener('click', () => {
@@ -169,19 +177,16 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     });
 
-    // --- 初始化函数 ---
     function initialize() {
-        if (localStorage.getItem('theme') !== 'light') {
+        if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
 
         const savedDict = localStorage.getItem('customDictionary') || DEFAULT_GUGU_DICT_STRING;
-        customDictInput.value = savedDict;
-        
+        // The applyDictionary function will handle cleaning and setting the input value.
         applyDictionary(savedDict);
     }
 
-    // 启动！
     initialize();
 });
 </script>
