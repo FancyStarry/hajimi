@@ -4,34 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>灵感菇加密器</title>
+    <!-- 新增的图标链接 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg t='1752421917609' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='1588' width='200' height='200'%3e%3cpath d='M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m0-938.666667C277.333333 85.333333 85.333333 277.333333 85.333333 512s192 426.666667 426.666667 426.666667 426.666667-192 426.666667-426.666667S746.666667 85.333333 512 85.333333z' fill='%23585ce5' p-id='1589'%3e%3c/path%3e%3cpath d='M631.466667 635.733333H768v76.8h-136.533333v76.8h-89.6v-76.8H418.133333v-46.933333c-93.866667 89.6-110.933333 106.666667-119.466666 123.733333v-4.266666c-8.533333-17.066667-29.866667-46.933333-42.666667-55.466667 12.8-12.8 29.866667-38.4 29.866667-72.533333v-166.4H226.133333V409.6h145.066667v200.533333l21.333333-21.333333c8.533333 17.066667 17.066667 42.666667 25.6 59.733333v-12.8h123.733334v-25.6h-102.4v-76.8h102.4v-42.666666h89.6v42.666666h102.4v76.8h-102.4v25.6zM307.2 388.266667c-12.8-29.866667-42.666667-76.8-64-115.2l68.266667-42.666667c21.333333 34.133333 55.466667 81.066667 68.266666 110.933333L307.2 388.266667z m473.6-115.2c-25.6 51.2-64 93.866667-106.666667 132.266666 38.4 12.8 76.8 25.6 123.733334 34.133334-17.066667 17.066667-42.666667 51.2-55.466667 76.8-55.466667-12.8-102.4-34.133333-145.066667-59.733334-51.2 25.6-106.666667 46.933333-162.133333 64-8.533333-21.333333-29.866667-59.733333-46.933333-76.8 46.933333-8.533333 93.866667-25.6 136.533333-42.666666-25.6-25.6-46.933333-51.2-68.266667-81.066667h-38.4V247.466667h290.133334l17.066666-4.266667 55.466667 29.866667z m-234.666667 51.2c12.8 12.8 29.866667 29.866667 46.933334 42.666666 17.066667-12.8 38.4-25.6 51.2-42.666666h-98.133334z' fill='%23585ce5' p-id='1590'%3e%3c/path%3e%3c/svg%3e">
     <style>
-        /* CSS 变量定义主题颜色 */
-        :root {
-            --bg-color: #f0f2f5;
-            --container-bg: #ffffff;
-            --text-color: #333333;
-            --border-color: #dcdfe6;
-            --button-bg: #409eff;
-            --button-text: #ffffff;
-            --button-hover-bg: #66b1ff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --error-color: #f56c6c;
-            --theme-icon: '☀️';
-        }
-
-        body.dark-mode {
-            --bg-color: #1a1a1a;
-            --container-bg: #2c2c2c;
-            --text-color: #e0e0e0;
-            --border-color: #444444;
-            --button-bg: #585ce5;
-            --button-hover-bg: #797ee8;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --error-color: #ff7676;
-            --theme-icon: '🌙';
-        }
-
-        /* 全局样式和布局 (省略，与之前版本相同) */
+        /* CSS (折叠) */
+        :root { --bg-color: #f0f2f5; --container-bg: #ffffff; --text-color: #333333; --border-color: #dcdfe6; --button-bg: #409eff; --button-text: #ffffff; --button-hover-bg: #66b1ff; --shadow-color: rgba(0, 0, 0, 0.1); --error-color: #f56c6c; --theme-icon: '☀️'; }
+        body.dark-mode { --bg-color: #1a1a1a; --container-bg: #2c2c2c; --text-color: #e0e0e0; --border-color: #444444; --button-bg: #585ce5; --button-hover-bg: #797ee8; --shadow-color: rgba(0, 0, 0, 0.3); --error-color: #ff7676; --theme-icon: '🌙'; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; transition: background-color 0.3s, color 0.3s; padding: 20px; }
         .container { width: 100%; max-width: 600px; background-color: var(--container-bg); padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color 0.3s; }
@@ -56,31 +34,13 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="header">
-            <h1>灵感菇加密器</h1>
-            <button id="theme-toggle" title="切换深色/浅色模式"></button>
-        </div>
-
-        <div class="dictionary-section">
-            <label for="custom-dict">自定义加密字典：</label>
-            <div class="dict-input-wrapper">
-                <input type="text" id="custom-dict">
-                <button id="apply-dict-btn">应用</button>
-            </div>
-            <p id="dict-error"></p>
-        </div>
-        
+        <!-- HTML 结构 (折叠) -->
+        <div class="header"><h1>灵感菇加密器</h1><button id="theme-toggle" title="切换深色/浅色模式"></button></div>
+        <div class="dictionary-section"><label for="custom-dict">自定义加密字典：</label><div class="dict-input-wrapper"><input type="text" id="custom-dict"><button id="apply-dict-btn">应用</button></div><p id="dict-error"></p></div>
         <textarea id="input-text" placeholder="在此输入要加密或解密的文本..."></textarea>
-        
-        <div class="buttons">
-            <button id="encrypt-btn">加密</button>
-            <button id="decrypt-btn">解密</button>
-        </div>
-        
+        <div class="buttons"><button id="encrypt-btn">加密</button><button id="decrypt-btn">解密</button></div>
         <textarea id="output-text" placeholder="结果将显示在此处..." readonly></textarea>
-
         <button id="copy-btn">复制结果</button>
     </div>
 
@@ -88,17 +48,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 核心常量和变量 ---
-    const DEFAULT_GUGU_CHARS = ['灵', '感', '菇', '咕', '嘎', '噜', '刮', '擦', '呖', '哩'];
-    let GUGU_CHARS = [...DEFAULT_GUGU_CHARS];
+    const DEFAULT_GUGU_DICT_STRING = '灵感菇咕嘎噜刮擦呖哩';
     
-    // --- 修改点: 分隔符生成函数 ---
-    // 不再是静态常量，而是根据当前字典动态生成
-    const getSeparator = () => {
-        // 分隔符是当前字典的第一个字符重复两次
-        return GUGU_CHARS[0] + GUGU_CHARS[0];
-    };
+    let ENCODING_CHARS = [];
+    let SEPARATOR = '';
 
-    // --- DOM 元素获取 (省略，无变化) ---
+    // --- DOM 元素获取 (无变化) ---
     const inputText = document.getElementById('input-text');
     const outputText = document.getElementById('output-text');
     const encryptBtn = document.getElementById('encrypt-btn');
@@ -108,82 +63,92 @@ document.addEventListener('DOMContentLoaded', () => {
     const customDictInput = document.getElementById('custom-dict');
     const applyDictBtn = document.getElementById('apply-dict-btn');
     const dictError = document.getElementById('dict-error');
+    
+    // --- 核心算法：计算分隔符并返回编码用字典 ---
+    function calculateSeparatorAndChars(fullDict) {
+        const checksum = fullDict.reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        const separatorIndex = checksum % fullDict.length;
+        const separatorChar = fullDict[separatorIndex];
+        const encodingChars = fullDict.filter((_, index) => index !== separatorIndex);
+        
+        return {
+            separator: separatorChar,
+            chars: encodingChars
+        };
+    }
+    
+    // --- 应用字典的函数 ---
+    function applyDictionary(dictString) {
+        dictError.textContent = '';
+        if (!dictString || dictString.length < 2) {
+            dictError.textContent = '错误：字典至少需要2个字符。';
+            return false;
+        }
+        if (new Set(dictString).size !== dictString.length) {
+            dictError.textContent = '错误：字典中不能有重复字符。';
+            return false;
+        }
+        
+        const { separator, chars } = calculateSeparatorAndChars(Array.from(dictString));
+        
+        SEPARATOR = separator;
+        ENCODING_CHARS = chars;
+        
+        localStorage.setItem('customDictionary', dictString);
+        return true;
+    }
 
-    // --- 加密逻辑 ---
-    function toGuguBase(n) {
-        if (n === 0) return GUGU_CHARS[0];
+    // --- 加/解密逻辑 ---
+    function toBase(n) {
+        if (n === 0) return ENCODING_CHARS[0];
         let result = '';
-        const base = GUGU_CHARS.length;
+        const base = ENCODING_CHARS.length;
         while (n > 0) {
-            result = GUGU_CHARS[n % base] + result;
+            result = ENCODING_CHARS[n % base] + result;
             n = Math.floor(n / base);
         }
         return result;
     }
 
-    function encrypt(text) {
-        // --- 修改点: 加密时使用动态分隔符 ---
-        return text.split('').map(char => toGuguBase(char.charCodeAt(0))).join(getSeparator());
-    }
-
-    // --- 解密逻辑 ---
-    function fromGuguBase(guguStr) {
+    function fromBase(str) {
         let decimalValue = 0;
-        const base = GUGU_CHARS.length;
-        for (let i = 0; i < guguStr.length; i++) {
-            const char = guguStr[i];
-            const index = GUGU_CHARS.indexOf(char);
+        const base = ENCODING_CHARS.length;
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            const index = ENCODING_CHARS.indexOf(char);
             if (index === -1) {
-                // 如果在解密时发现了一个不在字典里的字符，则立即报错
-                throw new Error(`无效的字典字符: "${char}"`);
+                throw new Error(`无效的字符: "${char}"`);
             }
             decimalValue = decimalValue * base + index;
         }
         return decimalValue;
     }
 
+    function encrypt(text) {
+        return text.split('').map(char => toBase(char.charCodeAt(0))).join(SEPARATOR);
+    }
+
     function decrypt(guguText) {
-        // --- 修改点: 解密时使用动态分隔符 ---
-        const parts = guguText.split(getSeparator());
+        const parts = guguText.split(SEPARATOR);
         try {
             return parts.map(part => {
-                if (part === '') return ''; // 处理可能由split产生的空字符串
-                return String.fromCharCode(fromGuguBase(part));
+                if (part === '') return '';
+                return String.fromCharCode(fromBase(part));
             }).join('');
         } catch (error) {
-            return `解密失败：${error.message}`;
+            return `解密失败：${error.message}，请检查字典是否正确。`;
         }
     }
     
-    // --- 字典管理 ---
-    function applyDictionary(newDictString) {
-        dictError.textContent = '';
-        if (!newDictString || newDictString.length < 2) {
-            dictError.textContent = '错误：字典至少需要2个字符。';
-            return false;
-        }
-        // --- 修改点: 移除了对旧分隔符的检查，现在只检查重复字符即可 ---
-        // 这个检查已经足够，因为它能防止用户输入 'AA' 这样的字典
-        if (new Set(newDictString).size !== newDictString.length) {
-            dictError.textContent = '错误：字典中不能有重复字符。';
-            return false;
-        }
-        
-        GUGU_CHARS = Array.from(newDictString);
-        localStorage.setItem('customDictionary', newDictString);
-
-        const originalText = applyDictBtn.innerText;
-        applyDictBtn.innerText = '成功!';
-        setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
-
-        return true;
-    }
-
+    // --- 事件监听器 ---
     applyDictBtn.addEventListener('click', () => {
-        applyDictionary(customDictInput.value);
+        if (applyDictionary(customDictInput.value)) {
+            const originalText = applyDictBtn.innerText;
+            applyDictBtn.innerText = '成功!';
+            setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
+        }
     });
 
-    // --- 事件监听器 (省略，无变化) ---
     encryptBtn.addEventListener('click', () => {
         if (inputText.value) outputText.value = encrypt(inputText.value);
     });
@@ -204,20 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     });
 
-    // --- 初始化函数 (无变化) ---
+    // --- 初始化函数 ---
     function initialize() {
         if (localStorage.getItem('theme') !== 'light') {
             document.body.classList.add('dark-mode');
         }
 
-        const savedDict = localStorage.getItem('customDictionary');
-        if (savedDict) {
-            // 在加载时也要确保应用字典的逻辑是正确的
-            applyDictionary(savedDict);
-            customDictInput.value = savedDict;
-        } else {
-            customDictInput.value = DEFAULT_GUGU_CHARS.join('');
-        }
+        const savedDict = localStorage.getItem('customDictionary') || DEFAULT_GUGU_DICT_STRING;
+        customDictInput.value = savedDict;
+        
+        applyDictionary(savedDict);
     }
 
     // 启动！
