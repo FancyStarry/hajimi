@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>灵感菇加密器</title>
+    <title>灵感菇加密器 (双模式)</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg t='1752421917609' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='1588' width='200' height='200'%3e%3cpath d='M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m0-938.666667C277.333333 85.333333 85.333333 277.333333 85.333333 512s192 426.666667 426.666667 426.666667 426.666667-192 426.666667-426.666667S746.666667 85.333333 512 85.333333z' fill='%23585ce5' p-id='1589'%3e%3c/path%3e%3cpath d='M631.466667 635.733333H768v76.8h-136.533333v76.8h-89.6v-76.8H418.133333v-46.933333c-93.866667 89.6-110.933333 106.666667-119.466666 123.733333v-4.266666c-8.533333-17.066667-29.866667-46.933333-42.666667-55.466667 12.8-12.8 29.866667-38.4 29.866667-72.533333v-166.4H226.133333V409.6h145.066667v200.533333l21.333333-21.333333c8.533333 17.066667 17.066667 42.666667 25.6 59.733333v-12.8h123.733334v-25.6h-102.4v-76.8h102.4v-42.666666h89.6v42.666666h102.4v76.8h-102.4v25.6zM307.2 388.266667c-12.8-29.866667-42.666667-76.8-64-115.2l68.266667-42.666667c21.333333 34.133333 55.466667 81.066667 68.266666 110.933333L307.2 388.266667z m473.6-115.2c-25.6 51.2-64 93.866667-106.666667 132.266666 38.4 12.8 76.8 25.6 123.733334 34.133334-17.066667 17.066667-42.666667 51.2-55.466667 76.8-55.466667-12.8-102.4-34.133333-145.066667-59.733334-51.2 25.6-106.666667 46.933333-162.133333 64-8.533333-21.333333-29.866667-59.733333-46.933333-76.8 46.933333-8.533333 93.866667-25.6 136.533333-42.666666-25.6-25.6-46.933333-51.2-68.266667-81.066667h-38.4V247.466667h290.133334l17.066666-4.266667 55.466667 29.866667z m-234.666667 51.2c12.8 12.8 29.866667 29.866667 46.933334 42.666666 17.066667-12.8 38.4-25.6 51.2-42.666666h-98.133334z' fill='%23585ce5' p-id='1590'%3e%3c/path%3e%3c/svg%3e">
     <style>
-        /* CSS (折叠) */
+        /* CSS (大部分折叠) */
         :root { --bg-color: #f0f2f5; --container-bg: #ffffff; --text-color: #333333; --border-color: #dcdfe6; --button-bg: #409eff; --button-text: #ffffff; --button-hover-bg: #66b1ff; --shadow-color: rgba(0, 0, 0, 0.1); --error-color: #f56c6c; --theme-icon: '☀️'; }
         body.dark-mode { --bg-color: #1a1a1a; --container-bg: #2c2c2c; --text-color: #e0e0e0; --border-color: #444444; --button-bg: #585ce5; --button-hover-bg: #797ee8; --shadow-color: rgba(0, 0, 0, 0.3); --error-color: #ff7676; --theme-icon: '🌙'; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,12 +16,14 @@
         h1 { font-size: 24px; color: var(--text-color); }
         #theme-toggle { font-size: 24px; background: none; border: none; cursor: pointer; padding: 5px; }
         #theme-toggle::after { content: var(--theme-icon); }
-        .dictionary-section { margin-bottom: 20px; }
-        .dictionary-section label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .section { margin-bottom: 20px; }
+        .section label { display: block; margin-bottom: 8px; font-weight: bold; }
         .dict-input-wrapper { display: flex; gap: 10px; }
         #custom-dict { flex-grow: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-color); font-size: 16px; min-width: 0; }
         #apply-dict-btn { padding: 0 15px; font-size: 14px; flex-shrink: 0; }
         #dict-error { color: var(--error-color); font-size: 14px; margin-top: 8px; height: 1em; }
+        #mode-switch-btn { width: 100%; padding: 10px; font-size: 14px; background-color: #e9ecf3; color: #606266; border: 1px solid #dcdfe6; }
+        body.dark-mode #mode-switch-btn { background-color: #383838; color: #c0c4cc; border-color: #444; }
         textarea { width: 100%; height: 150px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-color); font-size: 16px; resize: vertical; margin-bottom: 20px; transition: background-color 0.3s, border-color 0.3s; }
         textarea:focus, #custom-dict:focus { outline: none; border-color: var(--button-bg); box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-bg) 30%, transparent); }
         .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
@@ -34,9 +36,16 @@
 </head>
 <body>
     <div class="container">
-        <!-- HTML 结构 (折叠) -->
         <div class="header"><h1>灵感菇加密器</h1><button id="theme-toggle" title="切换深色/浅色模式"></button></div>
-        <div class="dictionary-section"><label for="custom-dict">自定义加密字典：</label><div class="dict-input-wrapper"><input type="text" id="custom-dict"><button id="apply-dict-btn">应用</button></div><p id="dict-error"></p></div>
+        
+        <div class="section"><label for="custom-dict">自定义加密字典：</label><div class="dict-input-wrapper"><input type="text" id="custom-dict"><button id="apply-dict-btn">应用</button></div><p id="dict-error"></p></div>
+        
+        <!-- 新增的模式切换器 -->
+        <div class="section">
+            <label>加密模式：</label>
+            <button id="mode-switch-btn"></button>
+        </div>
+        
         <textarea id="input-text" placeholder="在此输入要加密或解密的文本..."></textarea>
         <div class="buttons"><button id="encrypt-btn">加密</button><button id="decrypt-btn">解密</button></div>
         <textarea id="output-text" placeholder="结果将显示在此处..." readonly></textarea>
@@ -46,144 +55,173 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- 全局常量和变量 ---
     const DEFAULT_GUGU_DICT_STRING = '灵感菇咕嘎噜刮擦呖哩';
-    let ENCODING_CHARS = [];
-    let SEPARATOR = '';
-
-    const inputText = document.getElementById('input-text');
-    const outputText = document.getElementById('output-text');
-    const encryptBtn = document.getElementById('encrypt-btn');
-    const decryptBtn = document.getElementById('decrypt-btn');
-    const copyBtn = document.getElementById('copy-btn');
-    const themeToggle = document.getElementById('theme-toggle');
-    const customDictInput = document.getElementById('custom-dict');
-    const applyDictBtn = document.getElementById('apply-dict-btn');
-    const dictError = document.getElementById('dict-error');
+    const SALT_LENGTH = 2;
     
-    function calculateSeparatorAndChars(fullDict) {
-        const checksum = fullDict.reduce((sum, char) => sum + char.charCodeAt(0), 0);
-        const separatorIndex = checksum % fullDict.length;
-        const separatorChar = fullDict[separatorIndex];
-        const encodingChars = fullDict.filter((_, index) => index !== separatorIndex);
-        return { separator: separatorChar, chars: encodingChars };
+    // 字典相关
+    let FULL_CHAR_ARRAY = [];  // 完整的、唯一的字符列表
+    let SEPARATOR = '';        // 分隔符
+    let ENCODING_CHARS = [];   // 仅用于静态模式的编码字典
+
+    // 模式相关
+    let encryptionMode = 'simple'; // 'simple' 或 'salted'
+
+    // --- DOM 元素 ---
+    const [inputText, outputText, encryptBtn, decryptBtn, copyBtn, themeToggle, customDictInput, applyDictBtn, dictError, modeSwitchBtn] = [
+        'input-text', 'output-text', 'encrypt-btn', 'decrypt-btn', 'copy-btn', 'theme-toggle', 'custom-dict', 'apply-dict-btn', 'dict-error', 'mode-switch-btn'
+    ].map(id => document.getElementById(id));
+    
+    // --- 辅助函数 (种子随机、洗牌) ---
+    function createSeededRandom(seed) { /* ... (无变化, 已折叠) */
+        return function() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280.0; };
+    }
+    function seededShuffle(array, seed) { /* ... (无变化, 已折叠) */
+        const tempArray = [...array]; const random = createSeededRandom(seed); let i = tempArray.length;
+        while (i--) { const j = Math.floor(random() * (i + 1)); [tempArray[i], tempArray[j]] = [tempArray[j], tempArray[i]]; }
+        return tempArray;
     }
     
-    // --- MODIFICATION START ---
-    // The applyDictionary function is now more forgiving.
+    // --- 核心逻辑 ---
+    function calculateSeparator(fullDict) {
+        const checksum = fullDict.reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        return fullDict[checksum % fullDict.length];
+    }
+    
     function applyDictionary(dictString) {
         dictError.textContent = '';
+        const uniqueCharsArray = Array.from(new Set(dictString.split('')));
+        
+        if (uniqueCharsArray.length < 10) dictError.textContent = '警告：为安全起见，建议字典长度至少为10。';
+        if (uniqueCharsArray.length < 2) { dictError.textContent = '错误：去重后，字典至少需要2个字符。'; return false; }
 
-        // 1. Automatically remove duplicate characters using a Set.
-        const uniqueCharsArray = Array.from(new Set(dictString.split(''))).join('');
+        const cleanedString = uniqueCharsArray.join('');
+        customDictInput.value = cleanedString;
         
-        // 2. Perform validation on the *cleaned* dictionary string.
-        if (uniqueCharsArray.length < 2) {
-            dictError.textContent = '错误：去重后，字典至少需要2个字符。';
-            return false;
-        }
+        FULL_CHAR_ARRAY = uniqueCharsArray;
+        SEPARATOR = calculateSeparator(FULL_CHAR_ARRAY);
+        // 为静态模式预先计算好编码字典
+        ENCODING_CHARS = FULL_CHAR_ARRAY.filter(c => c !== SEPARATOR); 
         
-        // 3. Update the input field to show the user the cleaned dictionary.
-        customDictInput.value = uniqueCharsArray;
-        
-        // 4. Proceed with the cleaned dictionary.
-        const fullDict = Array.from(uniqueCharsArray);
-        const { separator, chars } = calculateSeparatorAndChars(fullDict);
-        
-        SEPARATOR = separator;
-        ENCODING_CHARS = chars;
-        
-        // 5. Save the cleaned dictionary to local storage.
-        localStorage.setItem('customDictionary', uniqueCharsArray);
+        localStorage.setItem('customDictionary', cleanedString);
         return true;
     }
-    // --- MODIFICATION END ---
 
-    function toBase(n) {
-        if (n === 0) return ENCODING_CHARS[0];
-        let result = '';
-        const base = ENCODING_CHARS.length;
-        while (n > 0) {
-            result = ENCODING_CHARS[n % base] + result;
-            n = Math.floor(n / base);
-        }
-        return result;
+    // --- 基础转换函数 (现在接收字典作为参数) ---
+    function toBase(n, charMap) { /* ... (无变化, 已折叠) */
+        if (n === 0) return charMap[0]; let r = ''; const b = charMap.length; while (n > 0) { r = charMap[n % b] + r; n = Math.floor(n / b); } return r;
+    }
+    function fromBase(str, charMap) { /* ... (无变化, 已折叠) */
+        let d = 0; const b = charMap.length; for (let i = 0; i < str.length; i++) { const index = charMap.indexOf(str[i]); if (index === -1) throw new Error(`无效字符: "${str[i]}"`); d = d * b + index; } return d;
     }
 
-    function fromBase(str) {
-        let decimalValue = 0;
-        const base = ENCODING_CHARS.length;
-        for (let i = 0; i < str.length; i++) {
-            const char = str[i];
-            const index = ENCODING_CHARS.indexOf(char);
-            if (index === -1) {
-                throw new Error(`无效的字符: "${char}"`);
-            }
-            decimalValue = decimalValue * base + index;
-        }
-        return decimalValue;
+    // --- 模式一：静态加密/解密 ---
+    function encryptSimple(text) {
+        return text.split('').map(char => toBase(char.charCodeAt(0), ENCODING_CHARS)).join(SEPARATOR);
     }
-
-    function encrypt(text) {
-        // We must ensure that ENCODING_CHARS has been initialized.
-        if (ENCODING_CHARS.length === 0) {
-            alert('错误：加密字典未初始化，请先应用一个有效字典。');
-            return '';
-        }
-        return text.split('').map(char => toBase(char.charCodeAt(0))).join(SEPARATOR);
-    }
-
-    function decrypt(guguText) {
-        // We must ensure that ENCODING_CHARS has been initialized.
-        if (ENCODING_CHARS.length === 0) {
-            alert('错误：解密字典未初始化，请先应用一个有效字典。');
-            return '';
-        }
-        const parts = guguText.split(SEPARATOR);
+    function decryptSimple(guguText) {
         try {
-            return parts.map(part => {
+            return guguText.split(SEPARATOR).map(part => {
                 if (part === '') return '';
-                return String.fromCharCode(fromBase(part));
+                return String.fromCharCode(fromBase(part, ENCODING_CHARS));
             }).join('');
-        } catch (error) {
-            return `解密失败：${error.message}，请检查字典是否正确。`;
+        } catch (error) { return `解密失败：${error.message}，请检查是否为静态模式密文。`; }
+    }
+    
+    // --- 模式二：动态加盐加密/解密 ---
+    function encryptSalted(text) {
+        let salt = '';
+        for (let i = 0; i < SALT_LENGTH; i++) { salt += FULL_CHAR_ARRAY[Math.floor(Math.random() * FULL_CHAR_ARRAY.length)]; }
+        
+        const seed = salt.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const tempEncodingChars = seededShuffle(ENCODING_CHARS, seed);
+        
+        const encryptedData = text.split('').map(char => toBase(char.charCodeAt(0), tempEncodingChars)).join(SEPARATOR);
+        return salt + SEPARATOR + encryptedData;
+    }
+    function decryptSalted(guguText) {
+        const parts = guguText.split(SEPARATOR);
+        if (parts[0].length !== SALT_LENGTH || parts.length < 2) return `解密失败：无效的动态密文格式。`;
+        
+        const salt = parts[0];
+        const encryptedData = parts.slice(1).join(SEPARATOR);
+        
+        try {
+            const seed = salt.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const tempEncodingChars = seededShuffle(ENCODING_CHARS, seed);
+            return encryptedData.split(SEPARATOR).map(part => {
+                if (part === '') return '';
+                return String.fromCharCode(fromBase(part, tempEncodingChars));
+            }).join('');
+        } catch (error) { return `解密失败：${error.message}，请检查主字典是否匹配。`; }
+    }
+
+    // --- UI 更新函数 ---
+    function updateModeButtonText() {
+        if (encryptionMode === 'simple') {
+            modeSwitchBtn.textContent = '当前模式：静态 (点击切换至动态)';
+        } else {
+            modeSwitchBtn.textContent = '当前模式：动态加盐 (点击切换至静态)';
         }
     }
     
-    applyDictBtn.addEventListener('click', () => {
-        if (applyDictionary(customDictInput.value)) {
-            const originalText = applyDictBtn.innerText;
-            applyDictBtn.innerText = '成功!';
-            setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
-        }
+    // --- 事件监听器 ---
+    modeSwitchBtn.addEventListener('click', () => {
+        encryptionMode = (encryptionMode === 'simple') ? 'salted' : 'simple';
+        updateModeButtonText();
+        localStorage.setItem('encryptionMode', encryptionMode);
     });
 
     encryptBtn.addEventListener('click', () => {
-        if (inputText.value) outputText.value = encrypt(inputText.value);
+        if (!inputText.value) return;
+        if (encryptionMode === 'simple') {
+            outputText.value = encryptSimple(inputText.value);
+        } else {
+            outputText.value = encryptSalted(inputText.value);
+        }
     });
+
     decryptBtn.addEventListener('click', () => {
-        if (inputText.value) outputText.value = decrypt(inputText.value);
+        if (!inputText.value) return;
+        if (encryptionMode === 'simple') {
+            outputText.value = decryptSimple(inputText.value);
+        } else {
+            outputText.value = decryptSalted(inputText.value);
+        }
     });
+    
+    applyDictBtn.addEventListener('click', () => {
+        if (applyDictionary(customDictInput.value)) {
+            applyDictBtn.innerText = '成功!';
+            setTimeout(() => { applyDictBtn.innerText = '应用'; }, 1500);
+        }
+    });
+
     copyBtn.addEventListener('click', () => {
         if (outputText.value) {
             navigator.clipboard.writeText(outputText.value).then(() => {
-                const originalText = copyBtn.innerText;
                 copyBtn.innerText = '已复制！';
-                setTimeout(() => { copyBtn.innerText = originalText; }, 1500);
+                setTimeout(() => { copyBtn.innerText = '复制结果'; }, 1500);
             });
         }
     });
+    
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     });
 
+    // --- 初始化函数 ---
     function initialize() {
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
+        // 加载主题
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+        
+        // 加载并设置加密模式
+        encryptionMode = localStorage.getItem('encryptionMode') || 'simple';
+        updateModeButtonText();
 
+        // 加载并应用字典
         const savedDict = localStorage.getItem('customDictionary') || DEFAULT_GUGU_DICT_STRING;
-        // The applyDictionary function will handle cleaning and setting the input value.
         applyDictionary(savedDict);
     }
 
