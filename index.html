@@ -15,6 +15,7 @@
             --button-text: #ffffff;
             --button-hover-bg: #66b1ff;
             --shadow-color: rgba(0, 0, 0, 0.1);
+            --error-color: #f56c6c;
             --theme-icon: '☀️';
         }
 
@@ -26,6 +27,7 @@
             --button-bg: #585ce5;
             --button-hover-bg: #797ee8;
             --shadow-color: rgba(0, 0, 0, 0.3);
+            --error-color: #ff7676;
             --theme-icon: '🌙';
         }
 
@@ -42,7 +44,7 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* 改为flex-start以适应更长的内容 */
             min-height: 100vh;
             transition: background-color 0.3s, color 0.3s;
             padding: 20px;
@@ -85,6 +87,44 @@
             content: var(--theme-icon);
         }
 
+        /* 自定义字典区域 */
+        .dictionary-section {
+            margin-bottom: 20px;
+        }
+
+        .dictionary-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .dict-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #custom-dict {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        #apply-dict-btn {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        #dict-error {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 8px;
+            height: 1em; /* 预留空间，防止布局跳动 */
+        }
+        
         /* 文本区域 */
         textarea {
             width: 100%;
@@ -100,7 +140,7 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        textarea:focus {
+        textarea:focus, #custom-dict:focus {
             outline: none;
             border-color: var(--button-bg);
             box-shadow: 0 0 0 2px color-mix(in srgb, var(--button-bg) 30%, transparent);
@@ -150,12 +190,21 @@
             <h1>灵感菇加密器</h1>
             <button id="theme-toggle" title="切换深色/浅色模式"></button>
         </div>
+
+        <div class="dictionary-section">
+            <label for="custom-dict">自定义加密字典：</label>
+            <div class="dict-input-wrapper">
+                <input type="text" id="custom-dict">
+                <button id="apply-dict-btn">应用新字典</button>
+            </div>
+            <p id="dict-error"></p>
+        </div>
         
         <textarea id="input-text" placeholder="在此输入要加密或解密的文本..."></textarea>
         
         <div class="buttons">
-            <button id="encrypt-btn">加密成灵感菇</button>
-            <button id="decrypt-btn">从灵感菇解密</button>
+            <button id="encrypt-btn">加密</button>
+            <button id="decrypt-btn">解密</button>
         </div>
         
         <textarea id="output-text" placeholder="结果将显示在此处..." readonly></textarea>
@@ -166,8 +215,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 核心常量 ---
-    const GUGU_CHARS = ['灵', '感', '菇', '咕', '嘎', '噜', '刮', '擦', '呖', '哩'];
+    // --- 核心常量和变量 ---
+    const DEFAULT_GUGU_CHARS = ['灵', '感', '菇', '咕', '嘎', '噜', '刮', '擦', '呖', '哩'];
+    let GUGU_CHARS = [...DEFAULT_GUGU_CHARS]; // 当前使用的字典
     const SEPARATOR = ' '; // 使用空格作为每个加密字符之间的分隔符
 
     // --- DOM 元素获取 ---
@@ -177,107 +227,131 @@ document.addEventListener('DOMContentLoaded', () => {
     const decryptBtn = document.getElementById('decrypt-btn');
     const copyBtn = document.getElementById('copy-btn');
     const themeToggle = document.getElementById('theme-toggle');
+    const customDictInput = document.getElementById('custom-dict');
+    const applyDictBtn = document.getElementById('apply-dict-btn');
+    const dictError = document.getElementById('dict-error');
 
-    // --- 加密逻辑 ---
-    // 将普通数字转换为灵感菇进制数
+    // --- 加密逻辑 (这些函数现在依赖于可变的 GUGU_CHARS) ---
     function toGuguBase(n) {
         if (n === 0) return GUGU_CHARS[0];
         let result = '';
+        const base = GUGU_CHARS.length;
         while (n > 0) {
-            const remainder = n % GUGU_CHARS.length;
-            result = GUGU_CHARS[remainder] + result;
-            n = Math.floor(n / GUGU_CHARS.length);
+            result = GUGU_CHARS[n % base] + result;
+            n = Math.floor(n / base);
         }
         return result;
     }
 
-    // 主加密函数
     function encrypt(text) {
-        const encryptedChars = [];
-        for (let i = 0; i < text.length; i++) {
-            const charCode = text.charCodeAt(i);
-            encryptedChars.push(toGuguBase(charCode));
-        }
-        return encryptedChars.join(SEPARATOR);
+        return text.split('').map(char => toGuguBase(char.charCodeAt(0))).join(SEPARATOR);
     }
 
     // --- 解密逻辑 ---
-    // 将灵感菇进制数转换回普通数字
     function fromGuguBase(guguStr) {
         let decimalValue = 0;
+        const base = GUGU_CHARS.length;
         for (let i = 0; i < guguStr.length; i++) {
             const char = guguStr[i];
             const index = GUGU_CHARS.indexOf(char);
             if (index === -1) {
-                throw new Error(`无效的灵感菇字符: "${char}"`);
+                throw new Error(`无效的字典字符: "${char}"`);
             }
-            decimalValue = decimalValue * GUGU_CHARS.length + index;
+            decimalValue = decimalValue * base + index;
         }
         return decimalValue;
     }
 
-    // 主解密函数
     function decrypt(guguText) {
         const parts = guguText.trim().split(SEPARATOR);
-        let decryptedText = '';
-        for (const part of parts) {
-            if (part === '') continue;
-            try {
-                const charCode = fromGuguBase(part);
-                decryptedText += String.fromCharCode(charCode);
-            } catch (error) {
-                return `解密失败：${error.message}`;
-            }
+        try {
+            return parts.map(part => {
+                if (part === '') return '';
+                return String.fromCharCode(fromGuguBase(part));
+            }).join('');
+        } catch (error) {
+            return `解密失败：${error.message}`;
         }
-        return decryptedText;
+    }
+    
+    // --- 字典管理 ---
+    function applyDictionary(newDictString) {
+        dictError.textContent = ''; // 清除旧错误
+        // 验证1: 不能为空或太短
+        if (!newDictString || newDictString.length < 2) {
+            dictError.textContent = '错误：字典至少需要2个字符。';
+            return false;
+        }
+        // 验证2: 不能包含空格
+        if (newDictString.includes(SEPARATOR)) {
+            dictError.textContent = `错误：字典不能包含空格符。`;
+            return false;
+        }
+        // 验证3: 不能有重复字符
+        if (new Set(newDictString).size !== newDictString.length) {
+            dictError.textContent = '错误：字典中不能有重复字符。';
+            return false;
+        }
+        
+        // 应用新字典
+        GUGU_CHARS = Array.from(newDictString);
+        localStorage.setItem('customDictionary', newDictString);
+
+        const originalText = applyDictBtn.innerText;
+        applyDictBtn.innerText = '已应用!';
+        setTimeout(() => { applyDictBtn.innerText = originalText; }, 1500);
+
+        return true;
     }
 
+    applyDictBtn.addEventListener('click', () => {
+        applyDictionary(customDictInput.value);
+    });
 
     // --- 事件监听器 ---
     encryptBtn.addEventListener('click', () => {
-        const text = inputText.value;
-        if (text) {
-            outputText.value = encrypt(text);
-        }
+        if (inputText.value) outputText.value = encrypt(inputText.value);
     });
 
     decryptBtn.addEventListener('click', () => {
-        const text = inputText.value;
-        if (text) {
-            outputText.value = decrypt(text);
-        }
+        if (inputText.value) outputText.value = decrypt(inputText.value);
     });
 
     copyBtn.addEventListener('click', () => {
         if (outputText.value) {
-            navigator.clipboard.writeText(outputText.value)
-                .then(() => {
-                    const originalText = copyBtn.innerText;
-                    copyBtn.innerText = '已复制！';
-                    setTimeout(() => {
-                        copyBtn.innerText = originalText;
-                    }, 1500);
-                })
-                .catch(err => {
-                    console.error('复制失败: ', err);
-                });
+            navigator.clipboard.writeText(outputText.value).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = '已复制！';
+                setTimeout(() => { copyBtn.innerText = originalText; }, 1500);
+            }).catch(err => console.error('复制失败: ', err));
         }
     });
 
     // --- 主题切换逻辑 ---
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-        localStorage.setItem('theme', currentTheme);
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
     });
 
-    // --- 初始化主题 ---
-    // 页面加载时，检查本地存储以应用之前的主题
-    const savedTheme = localStorage.getItem('theme');
-    // 默认设置为深色，除非用户明确选择了浅色
-    if (savedTheme !== 'light') {
-        document.body.classList.add('dark-mode');
+    // --- 初始化函数 ---
+    function initialize() {
+        // 1. 初始化主题 (默认深色)
+        if (localStorage.getItem('theme') !== 'light') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // 2. 初始化字典
+        const savedDict = localStorage.getItem('customDictionary');
+        if (savedDict) {
+            GUGU_CHARS = Array.from(savedDict);
+            customDictInput.value = savedDict;
+        } else {
+            customDictInput.value = DEFAULT_GUGU_CHARS.join('');
+        }
     }
+
+    // 启动！
+    initialize();
 });
 </script>
 
